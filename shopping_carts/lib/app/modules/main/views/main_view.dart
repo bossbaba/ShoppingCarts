@@ -45,42 +45,56 @@ class MainView extends GetView<MainController> {
                       padding: const  EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(32.0)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 260,
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius:BorderRadius.circular(10.0),
-                                  child: SvgPicture.network('https://lf-cdn-tos.bytescm.com/obj/static/xitu_extension/static/gold.981a5510.svg',width: 60,),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 260,
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius:BorderRadius.circular(10.0),
+                                    child: SvgPicture.network('${controller.categoriesList[index].icon}',width: 60,),
 
-                                ),
-                               const SizedBox(width: 10,),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("${controller.categoriesList[index].name}"),
-                                  const SizedBox(width: 180,child:  Text("more descriptions more and more",maxLines: 1,
-                                     overflow: TextOverflow.ellipsis,
-                                   ),)
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  const SizedBox(width: 10,),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("${controller.categoriesList[index].name}"),
+                                          const SizedBox(width: 10,),
+                                          const Text('约3000,000件',style: TextStyle(color: Colors.grey,fontSize: 12),)
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      const SizedBox(width: 180,child:  Text("分类描述，可能字段很多.分类描述，可能字段很多",maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 12.0),
+                                      ),)
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_right))
-                        ],
+                            IconButton(onPressed: (){
+                              Get.toNamed('/categories',arguments: controller.categoriesList[index].id);
+                            }, icon: const Icon(Icons.arrow_forward_ios_rounded,size: 18,))
+                          ],
+                        ),
                       ),
-                    )),
+
+                    ),
                     Positioned(
-                        right: 0,
+                        left: 0,
                         top: 0,
                         child: Container(
                           width: 60,
-                          height: 30,
+                          height: 20,
                           decoration: const BoxDecoration(
                               color: Colors.amberAccent,
                               borderRadius: BorderRadius.only(topLeft: Radius

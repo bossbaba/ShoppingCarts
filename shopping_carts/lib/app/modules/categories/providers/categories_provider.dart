@@ -7,19 +7,10 @@ class CategoriesProvider extends GetConnect {
   void onInit() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return Categories.fromJson(map);
-      if (map is List) {
+      if (map is List)
         return map.map((item) => Categories.fromJson(item)).toList();
-      }
     };
-    httpClient.baseUrl = 'http://dev.api.onlyylt.top/categories/';
-  }
-
-  Future<List<Categories>?> getAllCategories(int page,int size) async  {
-    final response = await get("findAll",query:{
-      "page":page.toString(),
-      "size":size.toString()
-    });
-    return response.body;
+    httpClient.baseUrl = 'YOUR-API-URL';
   }
 
   Future<Categories?> getCategories(int id) async {
