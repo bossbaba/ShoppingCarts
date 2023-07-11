@@ -66,7 +66,8 @@ class MainView extends GetView<MainController> {
                                         children: [
                                           Text("${controller.categoriesList[index].name}"),
                                           const SizedBox(width: 10,),
-                                          const Text('约3000,000件',style: TextStyle(color: Colors.grey,fontSize: 12),)
+                                           Text('${controller.categoriesList[index].count}件',
+                                             style: const TextStyle(color: Colors.grey,fontSize: 12),)
                                         ],
                                       ),
                                       const SizedBox(
