@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../controllers/main_controller.dart';
 
@@ -13,6 +14,11 @@ class MainView extends GetView<MainController> {
       appBar: AppBar(
         title: const Text('MainView'),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: (){
+            Get.toNamed('/settings');
+          }, icon: const Icon(Icons.settings))
+        ],
       ),
       body: SmartRefresher(
         controller: controller.refreshController,
@@ -23,7 +29,7 @@ class MainView extends GetView<MainController> {
         child:  Obx(() => ListView.builder(
           shrinkWrap: true,
              physics:const BouncingScrollPhysics() ,
-            itemCount: controller.categoriesList.value.length,
+            itemCount: controller.categoriesList.length,
             itemBuilder: (context,int index) {
               return Container(
                 height: 129,
@@ -34,8 +40,43 @@ class MainView extends GetView<MainController> {
                 ),
                 child: Stack(
                   children: [
+                    Positioned(child: Container(
+                      height: 129,
+                      padding: const  EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32.0)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 260,
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius:BorderRadius.circular(10.0),
+                                  child: SvgPicture.network('https://lf-cdn-tos.bytescm.com/obj/static/xitu_extension/static/gold.981a5510.svg',width: 60,),
+
+                                ),
+                               const SizedBox(width: 10,),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("${controller.categoriesList[index].name}"),
+                                  const SizedBox(width: 180,child:  Text("more descriptions more and more",maxLines: 1,
+                                     overflow: TextOverflow.ellipsis,
+                                   ),)
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_right))
+                        ],
+                      ),
+                    )),
                     Positioned(
-                        left: 0,
+                        right: 0,
                         top: 0,
                         child: Container(
                           width: 60,
@@ -47,8 +88,8 @@ class MainView extends GetView<MainController> {
                                   32.0))
                           ),
                           child: Center(child: Text('${controller
-                              .categoriesList[index]?.name}'),),
-                        ))
+                              .categoriesList[index].name}'),),
+                        )),
                   ],
                 ),
               );

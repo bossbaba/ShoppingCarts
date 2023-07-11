@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shopping_carts/app/modules/main/providers/categories_provider.dart';
-import 'package:shopping_carts/app/utils/tools.dart';
 
 import '../categories_model.dart';
 
@@ -18,7 +17,9 @@ class MainController extends GetxController {
     Categories(name:"name",id:"hot")
   ].obs;
 
-  final count = 0.obs;
+  final count = 1.obs;
+
+  final RxBool loaded = true.obs;
   @override
   void onInit() {
     categoriesList.value = [];
@@ -37,9 +38,12 @@ class MainController extends GetxController {
 
   void increment() => count.value++;
 
-  void onLoading()  {
-   // await getAllCategories(isLoading: true);
-   handlerDebounce(getAllCategories(isLoading: true));
+  void onLoading() async  {
+    if(loaded.value) {
+      loaded.value = false;
+      await getAllCategories(isLoading: true);
+    }
+
   }
 
   void onRefresh() async {
@@ -48,16 +52,26 @@ class MainController extends GetxController {
 
   getAllCategories(
       {bool isRefresh = false, bool isLoading = false}) async {
-    List<Categories>?list = await provider.getAllCategories(1, 10);
-    if(list != null && list.isNotEmpty){
+    List<Categories>?list = await provider.getAllCategories(count.value , 10);
+    if(list != null){
       if(isRefresh) {
         refreshController.refreshCompleted();
         categoriesList.value = list;
+        if(count.value > 1) {
+          count.value = 1;
+        }
+        count.value ++;
       }
 
       if(isLoading) {
-        refreshController.loadComplete();
-        categoriesList.addAll(list);
+        loaded.value = true;
+        if(list.isNotEmpty) {
+          refreshController.loadComplete();
+          categoriesList.addAll(list);
+          count.value += 1;
+        } else {
+          refreshController.loadComplete();
+        }
       }
     }
   }
